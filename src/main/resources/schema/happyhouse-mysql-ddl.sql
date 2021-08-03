@@ -1,0 +1,1 @@
+insert into TBL_USER (email, password, roles) values('rednics@naver.com', 'sky0814', 'ROLE_USER');

@@ -1,0 +1,67 @@
+spring:
+  application:
+    name: SAMPLE-SERVICE
+
+  datasource:
+    url: jdbc:log4jdbc:mysql://mysql:3306/happyhouse?useUnicode=true&characterEncoding=utf8&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=Asia/Seoul
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+    username: root
+    password: rootpassword
+
+    hikari:
+      connection-timeout: 30000
+      idle-timeout: 600000
+      minimum-idle: 5
+      maximum-pool-size: 5
+      pool-name: HikariPool
+      connection-test-query: SELECT 1
+
+  messages:
+    basename: messages
+    encoding: UTF-8
+    cache-duration: 60
+    use-code-as-default-message: true
+
+    devtools:
+    restart:
+      enabled: true
+
+mybatis:
+  config-location: classpath:/mybatis-config.xml
+
+feign:
+  hystrix:
+    enabled: false
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000
+        loggerLevel: full
+
+logging:
+  file:
+    path: ../logs
+    name: ${logging.file.path}/${spring.application.name}-app.log
+  level:
+    root: info
+    web: info
+    org.springframework.transaction.interceptor: ERROR
+    jdbc: off
+    jdbc.sqlonly: off
+    jdbc.sqltiming: info
+    jdbc.resultsettable: info
+    jdbc.audit: off
+    jdbc.resultset: off
+    jdbc.connection: off
+    org.apache.camel: off
+    com.happyhouse: info
+    com.happyhouse.server.api.client.IgpClient: INFO
+
+app:
+  feign:
+    igp-url: http://localhost:8080
+  file:
+    path:
+      base: /storage
+      upload: /upload

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.happyhouse.server.api.repository.UserRepository">
+
+	<!--
+	<resultMap id="talk" type="com.happyhouse.servers.ts.service.eTalkService$Talk">
+		<id property="id" column="id" />
+		<result property="roomId" column="room_id"/>
+		<result property="talkId" column="talk_id"/>
+		<result property="sender" column="sender"/>
+		<result property="payloadType" column="payload_type"/>
+		<result property="withdrawYn" column="withdraw_yn"/>
+		<result property="extraPayload" column="extra_payload"/>
+		<association column="id" property="message" select="getTalkMessage" />
+		<association column="id" property="file" select="getTalkFiles" />
+		<collection column="id" property="receivers" select="getTalkReceivers" />
+		<collection column="id" property="readers" select="getTalkReaders" />
+	</resultMap>
+	public static class Talk {
+		private int id;
+		private int roomId;
+		private int talkId;
+		private int sender;
+		private String payloadType;
+		private String withdrawYn;
+		private String extraPayload;
+		private TalkMessage message;
+		private AttachmentFile file;
+		private List<Integer> receivers;
+		private List<Integer> readers;
+	}
+	-->
+
+	<insert id="create" parameterType="user">
+		/* 사용자 생성 */
+		INSERT INTO TBL_USER (
+			email
+			, password
+			, roles
+		)
+		VALUES (
+		    #{email}
+		    , #{password}
+		    , #{roles}
+	     )
+		<selectKey resultType="int" keyProperty="id">
+			SELECT @@IDENTITY AS value
+		</selectKey>
+	</insert>
+
+	<update id="update" parameterType="user">
+		/* 사용자 업데이트 */
+		UPDATE TBL_USER
+		SET
+			email = #{email}
+			, password = #{password}
+			, roles = #{roles}
+		WHERE id = #{id}
+	</update>
+
+	<delete id="delete" parameterType="int">
+		/* 사용자 삭제 */
+		DELETE FROM TBL_USER
+		WHERE id = #{id}
+	</delete>
+
+	<select id="findAll" resultType="user">
+		/* 사용자 조회 (all) */
+		SELECT id, email, password, roles
+		FROM TBL_USER
+	</select>
+
+	<select id="findById" parameterType="int" resultType="user">
+		/* 사용자 조회 (by id) */
+		SELECT id, email, password, roles
+		FROM TBL_USER
+		WHERE id = #{id}
+	</select>
+
+	<select id="findByEmail" parameterType="map" resultType="user">
+		/* 사용자 조회 (by email) */
+		SELECT id, email, password, roles
+		FROM TBL_USER
+		WHERE email = #{email}
+	</select>
+
+	<select id="existByEmail" parameterType="map" resultType="boolean">
+		/* 사용자 존재여부 (by email)*/
+		SELECT IF(COUNT(*) = 1, 1, 0)
+		FROM TBL_USER
+		WHERE email = #{email}
+	</select>
+
+</mapper>
